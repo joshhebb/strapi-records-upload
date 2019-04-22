@@ -7,12 +7,26 @@ export async function extractRecordsFromCSV(filename) {
     csv
       .fromPath(filename)
       .on("data", function (data) {
+
+        var name = data[0];
+        var nick_name = '';
+
+        if(name.indexOf('\'') > 0) {
+          name = name.split('\'')[0]
+          nick_name = name.split('\'')[1]
+        } 
+        else if(name.indexOf('\"') > 0) {
+          name = name.split('\"')[0]
+          nick_name = name.split('\"')[1]
+        }
+
         var record = {
-          'Name' : data[0],
+          'Name' : name,
+          'Nickname' : nick_name,
           'Year of birth' : data[1],
           'Year of death' : data[2],
           'Obituary' : data[3],
-          'ID' : data[6],
+          'ID' : data[6].split('.')[0],
           'Images' : [],
           'Attachments' : []
         }
